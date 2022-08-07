@@ -1,5 +1,5 @@
 from .models import CustomUser
-from phonenumber_field.serialzerfields import PhoneNumberField
+from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
 
@@ -27,10 +27,10 @@ class CustomUserCreationSerializer(serializers.ModelSerializer):
         if email_exists:
             raise serializers.ValidationError('email already exists')
 
-        phone_number_exists = CustomUser.objects.filter(phone_number=attrs['phone_number']).exists()
+        phone_no_exists = CustomUser.objects.filter(phone_no=attrs['phone_no']).exists()
        
 
-        if phone_number_exists:
+        if phone_no_exists:
             raise serializers.ValidationError('phone number already exists')
 
 
