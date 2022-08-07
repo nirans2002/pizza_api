@@ -17,7 +17,7 @@ class OrderCreationSerializers(serializers.ModelSerializer):
 class OrderDetailSerializers(serializers.ModelSerializer):
 
     # customer = serializers.ForeignKey()
-    size = serializers.CharField(max_length=30,)
+    size = serializers.CharField()
     order_status = serializers.CharField()
     quantity = serializers.IntegerField(default=1)
 
@@ -26,7 +26,7 @@ class OrderDetailSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['size', 'order_status',
+        fields = ['id','size', 'order_status',
                   'quantity', 'created_at', 'updated_at']
 
 

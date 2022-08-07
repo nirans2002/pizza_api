@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
-
+from django.contrib.auth import get_user_model
 from orders.serializers import OrderCreationSerializers, OrderDetailSerializers, OrderUpdateSerializer
 from .models import Order
 from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
-
+User = get_user_model()
 class HelloOrderView(generics.GenericAPIView):
     def get(self, request):
         return Response(data={'message': 'Hello, order!'}, status=status.HTTP_200_OK)
@@ -89,3 +89,35 @@ class UpdateOrderStatus(generics.GenericAPIView):
             serializer.save(customer=user)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class UserOrdersView(generics.GenericAPIView):
+    # permission_classes = [
+    #     IsAuthenticated
+    # ]
+
+    serializer_class = OrderDetailSerializers
+
+    def get(self, request,user_id):
+        user = User.objects.get(pk=user_id)
+        orders = Order.objects.all().filter(customer=user)
+        serializer = self.serializer_class(instance=orders, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+class UserOrderDetail(generics.GenericAPIView):
+    # permission_classes = [
+    #     IsAuthenticated
+    # ]
+
+    serializer_class = OrderDetailSerializers
+
+    def get(self, request
+    ,user_id,order_id):
+        user = User.objects.get(pk=user_id)
+        order = Order.objects.all().filter(customer=user).get(pk=order_id)
+        
+        serializer = self.serializer_class(instance=order)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
