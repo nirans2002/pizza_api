@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from orders.serializers import OrderCreationSerializers, OrderDetailSerializers, OrderUpdateSerializer
 from .models import Order
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAdminUser,IsAuthenticated
 # Create your views here.
 
 User = get_user_model()
@@ -19,7 +19,7 @@ class OrderCreationView(generics.GenericAPIView):
     queryset = Order.objects.all()
 
     permission_classes = [
-        IsAuthenticated
+        IsAuthenticatedOrReadOnly
     ]
 
     def get(self, request):
@@ -44,7 +44,7 @@ class OrderCreationView(generics.GenericAPIView):
 
 class OrderDetailView(generics.GenericAPIView):
     permission_classes = [
-        IsAuthenticated
+        IsAdminUser
     ]
     serializer_class = OrderDetailSerializers
 

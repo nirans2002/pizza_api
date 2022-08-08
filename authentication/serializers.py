@@ -35,3 +35,15 @@ class CustomUserCreationSerializer(serializers.ModelSerializer):
 
 
         return super().validate(attrs)
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            phone_no=validated_data['phone_no'],
+            password=validated_data['password']
+      )
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
